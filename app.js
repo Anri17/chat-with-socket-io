@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
     // Send Receive Test
     socket.on('newUserLogin', (newUserLogin) => {
         console.log(users[socket.id] + ' connected');
-        console.log()
+        users[socket.id] = newUserLogin;
         socket.broadcast.emit('newUserLoginAnouncement', newUserLogin);
     });
 
