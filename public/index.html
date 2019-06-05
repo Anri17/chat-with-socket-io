@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Socket io</title>
+</head>
+<body>
+    <div class="container">
+        <header class="header-container">
+            <h1>Chat app with socket.io</h1>
+        </header>
+        <main class="main-container">
+            <div class="chat-box" id="chatBox"></div>
+            <form id="messageSubmit" class="message-submit">
+                <textarea class="message-box" name="" id="messageInput" cols="30" rows="10" placeholder="Write your message..."></textarea>
+                <button type="submit" class="message-submit-button" id="sendButton">Send</button>
+            </form>
+        </main>
+    </div>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io.connect('http://localhost:3000');
+        const messageForm = document.getElementById('messageSubmit');
+        const chatBox = document.getElementById("chatBox");
+        let messageInput = document.getElementById('messageInput');
+        let name = prompt("Write your username please");
+
+        // Login Message
+        displayLoginMessage(name);
+        socket.emit('newUserLogin', name);
+
+        socket.on('chatMessage', (message, username) => {
+            appendChatMessage(username, message);
+            console.log(message);
+        });
+
+        socket.on('newUserLoginAnouncement', (username) => {
+            displayLoginMessage(username);
+        });
+
+        messageForm.addEventListener('submit', e => {
+            e.preventDefault();
+            let message = messageInput.value;
+            socket.emit('chatMessageSubmit', message);
+            messageInput.value = '';
+            appendChatMessage(name, message);
+        });
+        
+        // User Disconnect
+        socket.on('disconect', () => {
+            socket.disconnect();
+        });
+
+        socket.on('userDisconected', (disconnectUser) => {
+            let disconnectMessage = document.createElement('p');
+            disconnectMessage.innerHTML = `${disconnectUser} Has Left The Server`;
+            chatBox.appendChild(disconnectMessage);
+        });
+
+
+        function displayLoginMessage(username) {
+            let loginMessage = document.createElement('p');
+            loginMessage.innerHTML = `${username} Has Joined The Server`
+            chatBox.appendChild(loginMessage);
+        }
+
+        function appendChatMessage(username, message) {
+            let messageBody = document.createElement('p');
+            chatBox.appendChild(messageBody);
+            messageBody.innerHTML = `${username}: ${message}`;
+        }
+
+    </script>
+</body>
+</html>
