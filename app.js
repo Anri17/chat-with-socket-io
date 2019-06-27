@@ -7,10 +7,12 @@ const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
 const url = 'mongodb://localhost:27017/socketIO';
 // Socket IO
-const io = require('socket.io')(3000);
+
+const chatRouter = require('./routers/chat.js').router;
 
 // Website Connection
 app.use('/', express.static(path.join(__dirname, 'public')));
+app.use(chatRouter);
 
 // Database
 MongoClient.connect(url, (err, db) => {
@@ -18,29 +20,6 @@ MongoClient.connect(url, (err, db) => {
     let dbo = db.db('socketIO');
     console.log('Database Created');
     db.close();
-});
-
-// Socket IO
-let users = {}
-
-io.on('connection', (socket) => {
-    // Send Receive Test
-    socket.on('newUserLogin', (newUserLogin) => {
-        console.log(users[socket.id] + ' connected');
-        users[socket.id] = newUserLogin;
-        socket.broadcast.emit('newUserLoginAnouncement', newUserLogin);
-    });
-
-    socket.on('chatMessageSubmit', (message) => {
-        socket.broadcast.emit('chatMessage', message, users[socket.id]);
-        console.log(message);
-    });
-
-    // User Disconect
-    socket.on('disconnect', () => {
-        console.log(users[socket.id] + ' disconnected');
-        socket.broadcast.emit('userDisconected', users[socket.id]);
-    });
 });
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
