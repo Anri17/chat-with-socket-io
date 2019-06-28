@@ -8,7 +8,7 @@ To run it:
   3. execute the command "npm install" to install all dependencies
   4. execute the command "npm start" to start the server
 
-The server will be running, and now you can acess the website with "http://localhost:3000/"
+The server will be running and now you can open the website in a new tab with the following link: "http://localhost:3000/"
 
 Open more than one tab to simulate multile users.
 
