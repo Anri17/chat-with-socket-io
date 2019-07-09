@@ -1,7 +1,10 @@
 const socket = io.connect();
 const messageForm = document.getElementById('messageSubmit');
 let messageInput = document.getElementById('messageInput');
-let name = prompt("Write your username please");
+let name;
+do {
+    name = prompt("Write your username please");
+} while(name == null || name == undefined || name == '');
 
 // Login Event
 appendLoginMessage(name);
