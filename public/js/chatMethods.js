@@ -17,3 +17,8 @@ function appendChatMessage(username, message) {
     chatBox.appendChild(messageBody);
     messageBody.innerHTML = `${username}: ${message}`;
 }
+
+function scrollDivToBottom(id){ 
+    let element = document.getElementById(id);
+    element.scrollTop = element.scrollHeight;
+}

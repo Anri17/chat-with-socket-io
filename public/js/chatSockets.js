@@ -23,6 +23,7 @@ messageForm.addEventListener('submit', e => {
 
 socket.on('chatMessage', (message, username) => {
     appendChatMessage(username, message);
+    if (document.getElementById('chat_messages').scrollTop >= document.getElementById('chat_messages').scrollHeight - 900) scrollDivToBottom('chat_messages');
 });
 
 // Logout Event
