@@ -17,13 +17,14 @@ socket.on('newUserLoginAnouncement', (username) => {
 // Message Submittion Event
 messageForm.addEventListener('submit', e => {
     e.preventDefault();
+    scrollDivToBottom('chatBox');
     socket.emit('chatMessageSubmit', messageInput.value);
     messageInput.value = '';
 });
 
 socket.on('chatMessage', (message, username) => {
     appendChatMessage(username, message);
-    if (document.getElementById('chat_messages').scrollTop >= document.getElementById('chat_messages').scrollHeight - 900) scrollDivToBottom('chat_messages');
+    if (document.getElementById('chatBox').scrollTop >= document.getElementById('chatBox').scrollHeight - 650) scrollDivToBottom('chatBox');
 });
 
 // Logout Event
